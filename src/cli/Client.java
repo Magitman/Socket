@@ -33,7 +33,12 @@ public class Client {
             List<Studente> students = this.createStudents();
             this.sendStudents(students);
 
-            List<Studente> editedStudents ;
+            List<Studente> editedStudents = this.receiveStudents();
+            if (editedStudents == null) {
+                System.out.println("The list received via stream is empty");
+            } else {
+
+            }
         } catch (IOException e) {
             System.out.println("Exception in class Client. Unable to set the socket right: " + e.getMessage());
         }
@@ -57,6 +62,18 @@ public class Client {
         } catch (IOException e) {
             System.out.println("Exception in class Client. Unable to write object into stream: " + e.getMessage());
         }
+    }
+
+    private List<Studente> receiveStudents() {
+        List<Studente> editedStudents = null;
+
+        try {
+            editedStudents = (List<Studente>) this.in.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Exception in class Client. Unable to read object from stream: " + e.getMessage());
+        }
+
+        return editedStudents;
     }
 
     private List<Studente> createStudents() {
