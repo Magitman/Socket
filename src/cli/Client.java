@@ -28,6 +28,12 @@ public class Client {
     private void start() {
         try {
             this.socket = new Socket(this.address, this.port);
+
+            this.openStreams();
+            List<Studente> students = this.createStudents();
+            this.sendStudents(students);
+
+            List<Studente> editedStudents ;
         } catch (IOException e) {
             System.out.println("Exception in class Client. Unable to set the socket right: " + e.getMessage());
         }
@@ -41,6 +47,15 @@ public class Client {
             this.out.flush();
         } catch (IOException e) {
             System.out.println("Exception in class Client. Unable to open streams: " + e.getMessage());
+        }
+    }
+
+    private void sendStudents(List<Studente> students) {
+        try {
+            this.out.writeObject(students);
+            this.out.flush();
+        } catch (IOException e) {
+            System.out.println("Exception in class Client. Unable to write object into stream: " + e.getMessage());
         }
     }
 
