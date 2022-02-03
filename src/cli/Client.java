@@ -28,17 +28,25 @@ public class Client {
     private void start() {
         try {
             this.socket = new Socket(this.address, this.port);
+            int index = 0;
 
-            this.openStreams();
-            List<Studente> students = this.createStudents();
-            this.sendStudents(students);
+            while (index < this.MAX_ATTEMPTS) {
+                this.openStreams();
+                List<Studente> students = this.createStudents();
+                this.sendStudents(students);
 
-            List<Studente> editedStudents = this.receiveStudents();
-            if (editedStudents == null) {
-                System.out.println("The list received via stream is empty");
-            } else {
+                List<Studente> editedStudents = this.receiveStudents();
+                if (editedStudents == null) {
+                    System.out.println("The list received via stream is empty");
+                } else {
+                    for (Studente student : editedStudents) {
+                        System.out.println(student.toString());
+                    }
+                }
 
+                index--;
             }
+
         } catch (IOException e) {
             System.out.println("Exception in class Client. Unable to set the socket right: " + e.getMessage());
         }
