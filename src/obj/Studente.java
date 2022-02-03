@@ -1,8 +1,9 @@
 package obj;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Studente {
+public class Studente implements Serializable {
     private String name, surname, description;
 
     public Studente(String name, String surname, String description) {
