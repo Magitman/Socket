@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Client {
     private Socket socket;
@@ -25,14 +26,14 @@ public class Client {
         this.MAX_ATTEMPTS = 8;
     }
 
-    private void start() {
+    public void start() {
         try {
             this.socket = new Socket(this.address, this.port);
             int index = 0;
 
             while (index < this.MAX_ATTEMPTS) {
                 this.openStreams();
-                List<Studente> students = this.createStudents();
+                List<Studente> students = this.createStudents(4);
                 this.sendStudents(students);
 
                 List<Studente> editedStudents = this.receiveStudents();
@@ -84,14 +85,15 @@ public class Client {
         return editedStudents;
     }
 
-    private List<Studente> createStudents() {
+    private List<Studente> createStudents(int numStudents) {
         List<Studente> students = new ArrayList<Studente>();
+        Random r = new Random(System.currentTimeMillis());
 
-        String[] names = {"Pippo", "Luca", "Gabriel", "Antonio", "Andrea", "Alessia", "Maria"};
-        String[] surnames = {"Cocaina", "Broggiato", "Gaviria", "Digrankio", "Ioana", "Frittata", "Stuarda"};
+        String[] names = {"Pippo", "Luca", "Gabriel", "Antonio", "Andrea", "Alessia", "Maria", "Paola"};
+        String[] surnames = {"Cocaina", "Broggiato", "Gaviria", "Digrankio", "Ioana", "Frittata", "Stuarda", "Puta"};
 
-        for (int index = 0; index < names.length; index++) {
-            students.add(new Studente(names[index], surnames[index], "Original description"));
+        for (int index = 0; index < numStudents; index++) {
+            students.add(new Studente(names[r.nextInt()], surnames[r.nextInt()], "Original description"));
         }
 
         return students;
