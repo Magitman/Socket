@@ -24,6 +24,7 @@ public class Server {
     public void start() {
         try {
             this.serverSocket = new ServerSocket(this.port);
+            System.out.println("Created ServerSocket");
 
             while (true) {
                 this.run();
@@ -41,6 +42,7 @@ public class Server {
     }
 
     private void openStreams() {
+        System.out.println("Connecting streams...");
         try {
             this.socket = this.serverSocket.accept();
 
@@ -51,6 +53,7 @@ public class Server {
         } catch (IOException e) {
             System.out.println("Exception in Class Server, unable to open streams: " + e.getMessage());
         }
+        System.out.println("Streams connected!");
     }
 
     private void closeStreams() {
@@ -68,15 +71,20 @@ public class Server {
         try {
             this.openStreams();
 
-            List<Studente> students = (List<Studente>) in.readObject();
+            List<Studente> students;
+            students = ((List<Studente>) in.readObject());
+
+            for (Studente student : students) {
+                System.out.println(student.toString());
+            }
 
             this.updateDescriptions(students);
 
+            System.out.println("Writing streams...");
             this.out.writeObject(students);
             this.out.flush();
-        } catch (IOException e) {
-            System.out.println("Exception in Class Server, unable to write on the stream: " + e.getMessage());
-        } catch (ClassNotFoundException e) {
+            System.out.println("Streams written!");
+        } catch (IOException | ClassNotFoundException e) {
             System.out.println("Exception in Class Server, unable to read from the stream: " + e.getMessage());
         } finally {
             this.closeStreams();
